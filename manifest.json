@@ -1,0 +1,35 @@
+{
+    "manifest_version": 3,
+    "name": "YouTube Tools",
+    "description": "Eshwary's YouTube Tools for a better viewing experience",
+    "version": "1.0",
+    "permissions": ["storage", "tabs"],
+    "host_permissions": ["https://*.youtube.com/*"],
+    "background": {
+        "service_worker": "main.js"
+    },
+    "content_scripts": [
+        {
+            "run_at": "document_end",
+            "matches": ["https://*.youtube.com/*"],
+            "js": ["tools.js"],
+            "css": ["clean_ui.css"]
+        }
+    ],
+    "action": {
+        "default_icon": {
+            "16": "images/icon-16.png",
+            "32": "images/icon-32.png",
+            "64": "images/icon-64.png",
+            "128": "images/icon-128.png"
+        },
+        "default_title": "Tools Dashboard",
+        "default_popup": "index.html"
+    },
+    "icons": {
+        "16": "images/icon-16.png",
+        "32": "images/icon-32.png",
+        "64": "images/icon-64.png",
+        "128": "images/icon-128.png"
+    }
+}
