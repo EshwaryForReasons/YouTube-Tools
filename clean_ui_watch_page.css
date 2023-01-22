@@ -8,6 +8,10 @@
     display: none !important;
 }
 
+ytd-menu-popup-renderer[sheets-refresh], .ytp-rounded-menu {
+    border-radius: 0px !important;
+}
+
 /**Topbar*/
 
 button, #container {
@@ -19,6 +23,10 @@ button, #container {
 }
 
 /**Related videos*/
+
+ytd-ad-slot-renderer {
+    display: none !important;
+}
 
 #scroll-container {
     display: none !important;
@@ -36,8 +44,9 @@ ytd-compact-video-renderer, ytd-compact-radio-renderer {
 
 #--tools-volume-display {
     position: absolute;
-    font-family: "Lato";
-    font-size: 30px;
+    font-family: "YouTube Sans";
+    font-size: 4rem;
+    font-weight: 600;
     color: #ffffff;
     transition: 0.3s;
     z-index: 1000;
@@ -50,6 +59,14 @@ ytd-compact-video-renderer, ytd-compact-radio-renderer {
 ytd-watch-flexy[theater] #player-theater-container.ytd-watch-flexy {
     max-height: 100vh !important;
 }
+
+.iv-branding {
+    display: none !important;
+}
+
+/* .ytp-menuitem[role = "menuitemcheckbox"] {
+    display: none !important;
+} */
 
 /**Under video*/
 

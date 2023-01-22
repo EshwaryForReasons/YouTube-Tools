@@ -1,0 +1,15 @@
+.style-scope, .ytd-popup-container {
+    border-radius: 0px !important;
+}
+
+.ytd-feed-filter-chip-bar-renderer {
+    border-radius: 0px !important;
+}
+
+.ytd-thumbnail {
+    border-radius: 0px !important;
+}
+
+#avatar, #img {
+    border-radius: 50% !important;
+}

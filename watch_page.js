@@ -73,8 +73,7 @@ const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
     //Callbacks
 
     const RightClickCallback = (event) => {
-        EnsureYouTubePlayer();
-        const rect = YoutubePlayer.getBoundingClientRect();
+        const rect = document.getElementsByClassName("html5-video-player")[0].getBoundingClientRect();
         if(event.clientY <= rect.top || event.clientY >= rect.bottom || event.clientX >= rect.right) return;
 
         event.preventDefault();

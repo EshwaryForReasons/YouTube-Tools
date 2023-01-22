@@ -12,8 +12,18 @@
         {
             "run_at": "document_end",
             "matches": ["https://*.youtube.com/*"],
-            "js": ["tools.js"],
-            "css": ["clean_ui.css"]
+            "css": ["clean_ui_common.css"]
+        },
+        {
+            "run_at": "document_end",
+            "matches": ["https://*.youtube.com/"],
+            "css": ["clean_ui_home_page.css"]
+        },
+        {
+            "run_at": "document_end",
+            "matches": ["https://*.youtube.com/watch?*"],
+            "js": ["watch_page.js"],
+            "css": ["clean_ui_watch_page.css"]
         }
     ],
     "action": {
