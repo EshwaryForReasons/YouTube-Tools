@@ -1,5 +1,3 @@
-const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
-
 (() => {
     const VolumeDisplayId = "--tools-volume-display"
 
@@ -15,6 +13,8 @@ const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
             NewVideoLoaded();
         }
     });
+
+    const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
     //Youtube Player
 

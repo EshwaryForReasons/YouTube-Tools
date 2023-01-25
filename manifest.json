@@ -3,27 +3,15 @@
     "name": "YouTube Tools",
     "description": "Eshwary's YouTube Tools for a better viewing experience",
     "version": "1.0",
-    "permissions": ["storage", "tabs"],
+    "permissions": ["storage", "tabs", "webNavigation", "scripting"],
     "host_permissions": ["https://*.youtube.com/*"],
     "background": {
         "service_worker": "main.js"
     },
     "content_scripts": [
         {
-            "run_at": "document_end",
             "matches": ["https://*.youtube.com/*"],
             "css": ["clean_ui_common.css"]
-        },
-        {
-            "run_at": "document_end",
-            "matches": ["https://*.youtube.com/"],
-            "css": ["clean_ui_home_page.css"]
-        },
-        {
-            "run_at": "document_end",
-            "matches": ["https://*.youtube.com/watch?*"],
-            "js": ["watch_page.js"],
-            "css": ["clean_ui_watch_page.css"]
         }
     ],
     "action": {
