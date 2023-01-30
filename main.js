@@ -15,7 +15,7 @@ const InsertCorrectCSS = async (url, tabId) => {
     if (url.includes("youtube.com/watch?")) {
         chrome.scripting.insertCSS({target: {tabId: tabId}, files: ["clean_ui_watch_page.css"]});
         chrome.scripting.removeCSS({target: {tabId: tabId}, files: ["clean_ui_home_page.css"]});
-        chrome.scripting.executeScript({target: {tabId: tabId}, files: ["watch_page.js"]})
+        chrome.scripting.executeScript({target: {tabId: tabId}, files: ["watch_page.js"]});
     }
     else if (url.includes("youtube.com/@")) {
         chrome.scripting.removeCSS({target: {tabId: tabId}, files: ["clean_ui_home_page.css", "clean_ui_watch_page.css"]});

@@ -1,28 +1,19 @@
 (() => {
     const VolumeDisplayId = "--tools-volume-display"
 
-    let YoutubePlayer;
     let IsLargePlayer = false;
     let VolumeDisplayTimeoutId;
+    let PreviousDelta;
 
-    chrome.runtime.onMessage.addListener((obj, sender, response) => {
-        const {type, value, videoId} = obj;
-
-        if(type === "NEW") {
-            CurrentVideo = VideoID;
-            NewVideoLoaded();
+    document.addEventListener("--tools-custom-event-extension", (event) => {
+        if(event.detail.volume !== undefined) {
+            FinishChangeVolume(event.detail.volume);
         }
     });
 
     const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
     //Youtube Player
-
-    const EnsureYouTubePlayer = () => {
-        if(!YoutubePlayer) {
-            YoutubePlayer = document.getElementsByClassName("video-stream")[0];
-        }
-    }
 
     const ToggleEnlargePlayer = () => {
         IsLargePlayer = !IsLargePlayer;
@@ -39,19 +30,14 @@
     //Volume
 
     const UpdateVolumeDisplayLocation = () => {
-        const rect = YoutubePlayer.getBoundingClientRect();
+        const rect = document.getElementById("movie_player").getBoundingClientRect();
         document.getElementById(VolumeDisplayId).style.transform = "translate(" + (rect.left + 20) + "px, " + (rect.top + 10) + "px)";
     }
 
-    const ChangeVolume = () => {
-        EnsureYouTubePlayer();
-
-        //Make sure we are not muted
-        YoutubePlayer.muted = false;
-
-        //For some reason deltaY < 0 means the user scrolled up
-        YoutubePlayer.volume = Math.round((clamp(YoutubePlayer.volume + (event.deltaY < 0 ? 0.05 : -0.05), 0, 1) + Number.EPSILON) * 100) / 100;
-
+    const FinishChangeVolume = (CurrentVolume) => {
+        const NewVolume = clamp(CurrentVolume + PreviousDelta, 0, 100);
+        YouTubeTools.DispatchEvent({setMuted: (NewVolume <= 0 ? true : false), setVolume: NewVolume});
+        
         //Show new volume
         if (!document.getElementById(VolumeDisplayId) && document.getElementById("player-container-inner")) {
             let VolumeDisplay = document.createElement("h3");
@@ -61,14 +47,14 @@
         
         clearTimeout(VolumeDisplayTimeoutId);
         UpdateVolumeDisplayLocation()
-        document.getElementById(VolumeDisplayId).innerHTML = YoutubePlayer.volume.toString();
+        document.getElementById(VolumeDisplayId).innerHTML = NewVolume.toString();
         document.getElementById(VolumeDisplayId).ariaLabel = null;
-        VolumeDisplayTimeoutId = setTimeout(VolumeDisplayTimeoutCallback, 3000);
-    }
+        VolumeDisplayTimeoutId = setTimeout(() => {
+            document.getElementById(VolumeDisplayId).ariaLabel = "--tools-tags-not-visible";
+        }, 3000);
 
-    const VolumeDisplayTimeoutCallback = () => {
-        document.getElementById(VolumeDisplayId).ariaLabel = "--tools-tags-not-visible";
-    };
+        PreviousDelta = 0;
+    }
 
     //Callbacks
 
@@ -82,9 +68,19 @@
 
     const ScrollCallback = (event) => {
         event.preventDefault();
-        ChangeVolume();
+        PreviousDelta = event.deltaY < 0 ? 5 : -5;
+        YouTubeTools.DispatchEvent({request: "GetVolume"});
     };
 
+    //Inject relevant scripts
+    const website_insert_scripts = ["core.js", "scripts.js"];
+    website_insert_scripts.forEach((script) => {
+        var ScriptElement = document.createElement("script");
+        ScriptElement.src = chrome.runtime.getURL(script);
+        (document.head || document.documentElement).appendChild(ScriptElement);
+    });
+
+    //Setup event listners
     document.body.addEventListener("contextmenu", RightClickCallback, true);
     document.getElementsByClassName("video-stream")[0].addEventListener("wheel", ScrollCallback, false);
 })();
