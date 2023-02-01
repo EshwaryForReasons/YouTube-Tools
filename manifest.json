@@ -8,13 +8,6 @@
     "background": {
         "service_worker": "main.js"
     },
-    "content_scripts": [
-        {
-            "matches": ["https://*.youtube.com/*"],
-            "css": ["clean_ui_common.css"],
-            "js": ["core.js"]
-        }
-    ],
     "web_accessible_resources": [
         {
             "resources": ["core.js", "scripts.js"],

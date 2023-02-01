@@ -1,50 +1,33 @@
-const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
+var clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
-window.onload = () => {
-    InitExtension();
-};
-
-document.addEventListener("--tools-custom-event-website", (event) => {
+document.addEventListener(EContext.Website.description, (event) => {
     if(event.detail.setMuted !== undefined) {
-        SetPlayerMuted(event.detail.setMuted);
+        SetPlayerMuted(event, event.detail.setMuted);
     }
     if(event.detail.setVolume !== undefined) {
-        SetPlayerVolume(event.detail.setVolume)
+        SetPlayerVolume(event, event.detail.setVolume)
     }
     if(event.detail.changeVolume !== undefined) {
-        ChangePlayerVolume(event.detail.changeVolume)
+        ChangePlayerVolume(event, event.detail.changeVolume)
     }
     if(event.detail.request !== undefined) {
         if(event.detail.request === "GetVolume") {
-            GetPlayerVolume();            
+            GetPlayerVolume(event, );            
         }
     }
 });
 
-const InitExtension = () => {
-    var MainMutationObserverCallback = (mutations) => {
-        mutations.forEach((mutation) => {
-            mutation.addedNodes.forEach((node) => {
-                if(node.id === "movie_player") {
-                    YouTubeTools.elements.player = node;
-                }
-                else if(node.classList && node.classList[0] && node.classList[0] === "video-stream") {
-                    YouTubeTools.elements.video = node;
-                }
-            });
-        });
-    };
+var EnsureVariables = () => {
+    YouTubeTools.elements.player = document.getElementById("movie_player");
+    YouTubeTools.elements.video = document.getElementsByClassName("video-stream")[0];
 
-    const MainMutationObserver = new MutationObserver(MainMutationObserverCallback);
-    MainMutationObserver.observe(document.documentElement, {
-        attributes: true,
-        characterData: true,
-        subtree: true,
-        childList: true
-    });
+    if(!document.getElementById("--tools-volume-display")) {
+        const VolumeDisplay = Object.assign(document.createElement("h3"), {id: "--tools-volume-display"});
+        document.getElementsByTagName("body")[0].appendChild(VolumeDisplay);
+    }
 };
 
-const SetPlayerMuted = (IsMuted) => {
+var SetPlayerMuted = (event, IsMuted) => {
     if(IsMuted) {
         YouTubeTools.elements.player.mute();
     }
@@ -53,14 +36,20 @@ const SetPlayerMuted = (IsMuted) => {
     }
 };
 
-const SetPlayerVolume = (NewVolume) => {
+var SetPlayerVolume = (event, NewVolume) => {
     YouTubeTools.elements.player.setVolume(NewVolume);
 };
 
-const GetPlayerVolume = () => {
-    document.dispatchEvent(new CustomEvent('--tools-custom-event-extension', {detail: {volume: YouTubeTools.elements.player.getVolume()}}));
+var GetPlayerVolume = (event) => {
+    YouTubeTools.DispatchEvent(EContext.Extension, {volume: YouTubeTools.elements.player.getVolume()})
 }
 
-const ChangePlayerVolume = (Delta) => {
+var ChangePlayerVolume = (event, Delta) => {
     YouTubeTools.elements.player.setVolume(clamp(YouTubeTools.elements.player.getVolume() + Delta, 0, 100));
+
+    if(event.detail.reportNew === true) {
+        YouTubeTools.DispatchEvent(EContext.Extension, {newVolume: YouTubeTools.elements.player.getVolume()})
+    }
 };
+
+EnsureVariables();

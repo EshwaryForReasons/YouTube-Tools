@@ -1,17 +1,17 @@
+var clamp = (num, min, max) => Math.min(Math.max(num, min), max);
+
 (() => {
-    const VolumeDisplayId = "--tools-volume-display"
+    const VolumeDisplayId = "--tools-volume-display";
 
     let IsLargePlayer = false;
     let VolumeDisplayTimeoutId;
     let PreviousDelta;
 
-    document.addEventListener("--tools-custom-event-extension", (event) => {
-        if(event.detail.volume !== undefined) {
-            FinishChangeVolume(event.detail.volume);
+    document.addEventListener(EContext.Extension.description, (event) => {
+        if(event.detail.newVolume !== undefined) {
+            UpdateVolumeDisplay(event.detail.newVolume);
         }
     });
-
-    const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
     //Youtube Player
 
@@ -23,38 +23,27 @@
 
         //Enable theater mode because it handles moving extra content out of the way for us
         document.getElementsByClassName("ytp-size-button")[0].click();
-
-        setTimeout(UpdateVolumeDisplayLocation, 100);
     }
 
     //Volume
 
-    const UpdateVolumeDisplayLocation = () => {
-        const rect = document.getElementById("movie_player").getBoundingClientRect();
-        document.getElementById(VolumeDisplayId).style.transform = "translate(" + (rect.left + 20) + "px, " + (rect.top + 10) + "px)";
-    }
+    const UpdateVolumeDisplay = (NewVolume) => {
+        let MoviePlayer = document.getElementById("movie_player");
+        let VolumeDisplay = document.getElementById("--tools-volume-display");
 
-    const FinishChangeVolume = (CurrentVolume) => {
-        const NewVolume = clamp(CurrentVolume + PreviousDelta, 0, 100);
-        YouTubeTools.DispatchEvent({setMuted: (NewVolume <= 0 ? true : false), setVolume: NewVolume});
-        
-        //Show new volume
-        if (!document.getElementById(VolumeDisplayId) && document.getElementById("player-container-inner")) {
-            let VolumeDisplay = document.createElement("h3");
-            VolumeDisplay.id = VolumeDisplayId;
-            document.getElementsByTagName("body")[0].appendChild(VolumeDisplay);
+        if(!MoviePlayer) {
+            return;
         }
-        
-        clearTimeout(VolumeDisplayTimeoutId);
-        UpdateVolumeDisplayLocation()
-        document.getElementById(VolumeDisplayId).innerHTML = NewVolume.toString();
-        document.getElementById(VolumeDisplayId).ariaLabel = null;
-        VolumeDisplayTimeoutId = setTimeout(() => {
-            document.getElementById(VolumeDisplayId).ariaLabel = "--tools-tags-not-visible";
-        }, 3000);
 
-        PreviousDelta = 0;
-    }
+        //Update volume display location
+        const rect = MoviePlayer.getBoundingClientRect();
+        VolumeDisplay.style.transform = "translate(" + (rect.left + 20) + "px, " + (rect.top + 10) + "px)";
+
+        //Show volume display
+        clearTimeout(VolumeDisplayTimeoutId);
+        Object.assign(VolumeDisplay, {innerHTML: NewVolume.toString(), ariaLabel: EToolsTags.NONE})
+        VolumeDisplayTimeoutId = setTimeout(() => VolumeDisplay.ariaLabel = EToolsTags.NotVisible, 3000);
+    };
 
     //Callbacks
 
@@ -69,7 +58,8 @@
     const ScrollCallback = (event) => {
         event.preventDefault();
         PreviousDelta = event.deltaY < 0 ? 5 : -5;
-        YouTubeTools.DispatchEvent({request: "GetVolume"});
+        YouTubeTools.DispatchEvent(EContext.Website, {changeVolume: PreviousDelta, reportNew: true});
+        PreviousDelta = 0;
     };
 
     //Inject relevant scripts
