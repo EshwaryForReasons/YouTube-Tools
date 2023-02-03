@@ -13,3 +13,19 @@
 #avatar, #img {
     border-radius: 50% !important;
 }
+
+#voice-search-button {
+    display: none !important;
+}
+
+ytd-rich-grid-renderer > #header {
+    display: none !important;
+}
+
+ytd-rich-section-renderer {
+    display: none !important;
+}
+
+#footer {
+    display: none !important;
+}

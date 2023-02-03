@@ -1,15 +1,40 @@
 var clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
 (() => {
-    const VolumeDisplayId = "--tools-volume-display";
-
     let IsLargePlayer = false;
     let VolumeDisplayTimeoutId;
-    let PreviousDelta;
 
     document.addEventListener(EContext.Extension.description, (event) => {
         if(event.detail.newVolume !== undefined) {
             UpdateVolumeDisplay(event.detail.newVolume);
+        }
+    });
+
+    chrome.runtime.onMessage.addListener((message) => {
+        if(message.receiver !== "extension") {
+            return;
+        }
+
+        if(message.hideNextVideoButton !== undefined) {
+            document.getElementsByClassName("ytp-next-button")[0].ariaLabel = message.hideNextVideoButton ? EToolsTags.NotVisible : EToolsTags.NONE;
+        }
+        if(message.hideVolumeControl !== undefined) {
+            document.getElementsByClassName("ytp-volume-area")[0].ariaLabel = message.hideVolumeControl ? EToolsTags.NotVisible : EToolsTags.NONE;
+        }
+        if(message.hideAutoplayControl !== undefined) {
+            document.getElementsByClassName("ytp-autonav-toggle-button-container")[0].ariaLabel = message.hideAutoplayControl ? EToolsTags.NotVisible : EToolsTags.NONE;
+        }
+        if(message.hideSubtitlesButton !== undefined) {
+            document.getElementsByClassName("ytp-subtitles-button")[0].ariaLabel = message.hideSubtitlesButton ? EToolsTags.NotVisible : EToolsTags.NONE;
+        }
+        if(message.hideMiniplayerButton !== undefined) {
+            document.getElementsByClassName("ytp-miniplayer-button")[0].ariaLabel = message.hideMiniplayerButton ? EToolsTags.NotVisible : EToolsTags.NONE;
+        }
+        if(message.hideTheaterModeButton !== undefined) {
+            document.getElementsByClassName("ytp-size-button")[0].ariaLabel = message.hideTheaterModeButton ? EToolsTags.NotVisible : EToolsTags.NONE;
+        }
+        if(message.hideFullscreenButton !== undefined) {
+            document.getElementsByClassName("ytp-fullscreen-button")[0].ariaLabel = message.hideFullscreenButton ? EToolsTags.NotVisible : EToolsTags.NONE;
         }
     });
 
@@ -57,9 +82,8 @@ var clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
     const ScrollCallback = (event) => {
         event.preventDefault();
-        PreviousDelta = event.deltaY < 0 ? 5 : -5;
+        const PreviousDelta = event.deltaY < 0 ? 5 : -5;
         YouTubeTools.DispatchEvent(EContext.Website, {changeVolume: PreviousDelta, reportNew: true});
-        PreviousDelta = 0;
     };
 
     //Inject relevant scripts
@@ -70,7 +94,15 @@ var clamp = (num, min, max) => Math.min(Math.max(num, min), max);
         (document.head || document.documentElement).appendChild(ScriptElement);
     });
 
-    //Setup event listners
-    document.body.addEventListener("contextmenu", RightClickCallback, true);
-    document.getElementsByClassName("video-stream")[0].addEventListener("wheel", ScrollCallback, false);
+    if(location.href.includes("youtube.com/watch?")) {
+        //Setup event listners
+        document.body.addEventListener("contextmenu", RightClickCallback, true);
+        document.getElementsByClassName("video-stream")[0].addEventListener("wheel", ScrollCallback, false);
+
+        //Disable subtitles by default
+        YouTubeTools.DispatchEvent(EContext.Website, {setSubtitlesEnabled: false});
+    }
+
+    //Update all settings
+    chrome.runtime.sendMessage({receiver: "background-worker", request: "UpdateSettings"});
 })();

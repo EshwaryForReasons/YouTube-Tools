@@ -3,7 +3,7 @@
     "name": "YouTube Tools",
     "description": "Eshwary's YouTube Tools for a better viewing experience",
     "version": "1.0",
-    "permissions": ["storage", "tabs", "webNavigation", "scripting", "activeTab"],
+    "permissions": ["webNavigation", "scripting", "storage", "tabs"],
     "host_permissions": ["https://*.youtube.com/*"],
     "background": {
         "service_worker": "main.js"
@@ -22,7 +22,7 @@
             "128": "images/icon-128.png"
         },
         "default_title": "Tools Dashboard",
-        "default_popup": "index.html"
+        "default_popup": "./Popup/index.html"
     },
     "icons": {
         "16": "images/icon-16.png",

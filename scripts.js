@@ -5,14 +5,17 @@ document.addEventListener(EContext.Website.description, (event) => {
         SetPlayerMuted(event, event.detail.setMuted);
     }
     if(event.detail.setVolume !== undefined) {
-        SetPlayerVolume(event, event.detail.setVolume)
+        SetPlayerVolume(event, event.detail.setVolume);
+    }
+    if(event.detail.setSubtitlesEnabled !== undefined) {
+        SetSubtitlesEnabled(event, event.detail.setSubtitlesEnabled);
     }
     if(event.detail.changeVolume !== undefined) {
-        ChangePlayerVolume(event, event.detail.changeVolume)
+        ChangePlayerVolume(event, event.detail.changeVolume);
     }
     if(event.detail.request !== undefined) {
         if(event.detail.request === "GetVolume") {
-            GetPlayerVolume(event, );            
+            GetPlayerVolume(event);            
         }
     }
 });
@@ -40,9 +43,19 @@ var SetPlayerVolume = (event, NewVolume) => {
     YouTubeTools.elements.player.setVolume(NewVolume);
 };
 
+var SetSubtitlesEnabled = (event, IsEnabled) => {
+    EnsureVariables();
+    if(IsEnabled) {
+        YouTubeTools.elements.player.toggleSubtitlesOn();
+    }
+    else if(YouTubeTools.elements.player.isSubtitlesOn()) {
+        YouTubeTools.elements.player.toggleSubtitles();
+    }
+};
+
 var GetPlayerVolume = (event) => {
     YouTubeTools.DispatchEvent(EContext.Extension, {volume: YouTubeTools.elements.player.getVolume()})
-}
+};
 
 var ChangePlayerVolume = (event, Delta) => {
     YouTubeTools.elements.player.setVolume(clamp(YouTubeTools.elements.player.getVolume() + Delta, 0, 100));

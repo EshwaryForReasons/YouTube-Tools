@@ -5,7 +5,8 @@ var YouTubeTools = {
 
 var EToolsTags = Object.freeze({
     NONE: "NONE",
-    NotVisible: "--tools-tags-not-visible"
+    NotVisible: "--tools-tags-not-visible",
+    ForceVisible: "--tools-tags-force-visible"
 });
 
 var EContext = Object.freeze({

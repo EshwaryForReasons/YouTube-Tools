@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 400px;
+    min-height: 600px;
+}
+
+#title {
+    border-bottom: solid #444444;
+    padding-bottom: 15px;
+}
+
+.main-grid-container {
+    display: grid;
+    grid-template-columns: 180px 180px;
+    gap: 10px;
+}
+
+.grid-item {
+    width: 180px;
+    height: 180px;
+}
+
+.home-page-button {
+    display: flex;
+    align-items: center;
+    background-color: #cccccc;
+    border: none;
+    text-decoration: none;
+    text-align: center;
+    color: #000000;
+    font-family: "Lato";
+    font-size: 2rem;
+    font-weight: 700;
+    transition: 0.3s;
+}
+
+.home-page-button:hover {
+    background-color: #aaaaaa;
+}
+
+.home-page-button:active {
+    background-color: #999999;
+}
+
+.options-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+}
+
+.option {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 380px;
+    height: 60px;
+    background-color: #eeeeee;
+    margin-bottom: 10px;
+    transition: 0.3s;
+}
+
+.option:hover {
+    background-color: #dddddd;
+}
+
+.option .label {
+    font-family: "Lato";
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-left: 10px;
+}
+
+.switch {
+    position: absolute;
+    display: block;
+    width: 60px;
+    height: 30px;
+    right: 30px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #cccccc;
+    transition: 0.3s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 25px;
+    width: 25px;
+    left: 4px;
+    bottom: 3px;
+    background-color: #ffffff;
+    transition: 0.3s;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #777777;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #555555;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #444444;
+}

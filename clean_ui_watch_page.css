@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
-
 #masthead-container[aria-disabled = "true"] ~ #page-manager {
     margin-top: 0px !important;
 }
@@ -16,10 +14,6 @@ ytd-menu-popup-renderer[sheets-refresh], .ytp-rounded-menu {
 
 button, #container {
     border-radius: 0px !important;
-}
-
-#voice-search-button {
-    display: none !important;
 }
 
 /**Related videos*/
@@ -60,13 +54,13 @@ ytd-watch-flexy[theater] #player-theater-container.ytd-watch-flexy {
     max-height: 100vh !important;
 }
 
-.iv-branding {
+#cinematics {
     display: none !important;
 }
 
-/* .ytp-menuitem[role = "menuitemcheckbox"] {
+.iv-branding {
     display: none !important;
-} */
+}
 
 /**Under video*/
 
@@ -78,6 +72,10 @@ ytd-watch-flexy[theater] #player-theater-container.ytd-watch-flexy {
     margin-bottom: 10px !important;
 }
 
+[aria-label = "Share"] {
+    display: none !important;
+}
+
 #button-shape {
     display: none !important;
 }
@@ -86,11 +84,8 @@ ytd-watch-flexy[theater] #player-theater-container.ytd-watch-flexy {
     display: none !important;
 }
 
-[aria-label = "Share"] {
-    display: none !important;
-}
-
-#always-shown {
+ytd-subscription-notification-toggle-button-renderer-next .yt-spec-button-shape-next__icon,
+ytd-subscription-notification-toggle-button-renderer-next .yt-spec-button-shape-next__secondary-icon {
     display: none !important;
 }
 
@@ -104,30 +99,34 @@ ytd-watch-metadata[modern-metapanel] #description.ytd-watch-metadata {
 
 /**YouTube Controls*/
 
-.ytp-next-button {
+.ytp-next-button[aria-label = "--tools-tags-not-visible"] {
     display: none !important;
 }
 
-.ytp-volume-area {
+.ytp-volume-area[aria-label = "--tools-tags-not-visible"] {
     display: none !important;
 }
 
-.ytp-autonav-toggle-button-container {
+.ytp-autonav-toggle-button-container[aria-label = "--tools-tags-not-visible"] {
     display: none !important;
 }
 
-.ytp-subtitles-button {
+.ytp-subtitles-button[aria-label = "--tools-tags-not-visible"] {
     display: none !important;
 }
 
-.ytp-miniplayer-button {
+.ytp-miniplayer-button[aria-label = "--tools-tags-not-visible"] {
     display: none !important;
 }
 
-.ytp-size-button {
+.ytp-size-button[aria-label = "--tools-tags-not-visible"] {
     display: none !important;
 }
 
-.ytp-fullscreen-button {
+.ytp-fullscreen-button[aria-label = "--tools-tags-not-visible"] {
+    display: none !important;
+}
+
+.ytp-menuitem[role = "menuitemcheckbox"] {
     display: none !important;
 }
