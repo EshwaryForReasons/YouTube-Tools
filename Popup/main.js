@@ -27,27 +27,25 @@ var OnInputChanged_FullscreenButton = (event) => {
 }
 
 chrome.tabs.query({active: true, lastFocusedWindow: true}).then((tabs) => {
-    if(tabs[0] && tabs[0].url.includes("youtube.com/watch?")) {
-        document.getElementById("--tools-input-checkbox-next-video-button").addEventListener("change", OnInputChanged_NextVideoButton);
-        document.getElementById("--tools-input-checkbox-volume-control").addEventListener("change", OnInputChanged_VolumeControl);
-        document.getElementById("--tools-input-checkbox-autoplay-control").addEventListener("change", OnInputChanged_AutoplayControl);
-        document.getElementById("--tools-input-checkbox-subtitles-button").addEventListener("change", OnInputChanged_SubtitlesButton);
-        document.getElementById("--tools-input-checkbox-miniplayer-button").addEventListener("change", OnInputChanged_MiniplayerButton);
-        document.getElementById("--tools-input-checkbox-theater-mode-button").addEventListener("change", OnInputChanged_TheaterModeButton);
-        document.getElementById("--tools-input-checkbox-fullscreen-button").addEventListener("change", OnInputChanged_FullscreenButton);
+    if(!location.href.includes("user_interface.html") || !tabs[0] && tabs[0].url.includes("youtube.com/watch?")) {
+        return;
     }
-});
 
-chrome.tabs.query({active: true, lastFocusedWindow: true}).then((tabs) => {
-    if(tabs[0] && tabs[0].url.includes("youtube.com/watch?")) {
-        chrome.storage.local.get(["hideNextVideoButton", "hideVolumeControl", "hideAutoplayControl", "hideSubtitlesButton", "hideMiniplayerButton", "hideTheaterModeButton", "hideFullscreenButton"]).then((result) => {
-            document.getElementById("--tools-input-checkbox-next-video-button").checked = result.hideNextVideoButton;
-            document.getElementById("--tools-input-checkbox-volume-control").checked = result.hideVolumeControl;
-            document.getElementById("--tools-input-checkbox-autoplay-control").checked = result.hideAutoplayControl;
-            document.getElementById("--tools-input-checkbox-subtitles-button").checked = result.hideSubtitlesButton;
-            document.getElementById("--tools-input-checkbox-miniplayer-button").checked = result.hideMiniplayerButton;
-            document.getElementById("--tools-input-checkbox-theater-mode-button").checked = result.hideTheaterModeButton;
-            document.getElementById("--tools-input-checkbox-fullscreen-button").checked = result.hideFullscreenButton;
-        });
-    }
+    chrome.storage.local.get(["hideNextVideoButton", "hideVolumeControl", "hideAutoplayControl", "hideSubtitlesButton", "hideMiniplayerButton", "hideTheaterModeButton", "hideFullscreenButton"]).then((result) => {
+        document.getElementById("--tools-input-checkbox-next-video-button").checked = result.hideNextVideoButton;
+        document.getElementById("--tools-input-checkbox-volume-control").checked = result.hideVolumeControl;
+        document.getElementById("--tools-input-checkbox-autoplay-control").checked = result.hideAutoplayControl;
+        document.getElementById("--tools-input-checkbox-subtitles-button").checked = result.hideSubtitlesButton;
+        document.getElementById("--tools-input-checkbox-miniplayer-button").checked = result.hideMiniplayerButton;
+        document.getElementById("--tools-input-checkbox-theater-mode-button").checked = result.hideTheaterModeButton;
+        document.getElementById("--tools-input-checkbox-fullscreen-button").checked = result.hideFullscreenButton;
+    });
+
+    document.getElementById("--tools-input-checkbox-next-video-button").addEventListener("change", OnInputChanged_NextVideoButton);
+    document.getElementById("--tools-input-checkbox-volume-control").addEventListener("change", OnInputChanged_VolumeControl);
+    document.getElementById("--tools-input-checkbox-autoplay-control").addEventListener("change", OnInputChanged_AutoplayControl);
+    document.getElementById("--tools-input-checkbox-subtitles-button").addEventListener("change", OnInputChanged_SubtitlesButton);
+    document.getElementById("--tools-input-checkbox-miniplayer-button").addEventListener("change", OnInputChanged_MiniplayerButton);
+    document.getElementById("--tools-input-checkbox-theater-mode-button").addEventListener("change", OnInputChanged_TheaterModeButton);
+    document.getElementById("--tools-input-checkbox-fullscreen-button").addEventListener("change", OnInputChanged_FullscreenButton);
 });
