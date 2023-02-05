@@ -1,29 +1,29 @@
 var OnInputChanged_NextVideoButton = (event) => {
-    chrome.runtime.sendMessage({receiver: "background-worker", hideNextVideoButton: event.target.checked});
+    chrome.runtime.sendMessage({receiver: "background-worker", "hideNextVideoButton": event.target.checked});
 }
 
 var OnInputChanged_VolumeControl = (event) => {
-    chrome.runtime.sendMessage({receiver: "background-worker", hideVolumeControl: event.target.checked});
+    chrome.runtime.sendMessage({receiver: "background-worker", "hideVolumeControl": event.target.checked});
 }
 
 var OnInputChanged_AutoplayControl = (event) => {
-    chrome.runtime.sendMessage({receiver: "background-worker", hideAutoplayControl: event.target.checked});
+    chrome.runtime.sendMessage({receiver: "background-worker", "hideAutoplayControl": event.target.checked});
 }
 
 var OnInputChanged_SubtitlesButton = (event) => {
-    chrome.runtime.sendMessage({receiver: "background-worker", hideSubtitlesButton: event.target.checked});
+    chrome.runtime.sendMessage({receiver: "background-worker", "hideSubtitlesButton": event.target.checked});
 }
 
 var OnInputChanged_MiniplayerButton = (event) => {
-    chrome.runtime.sendMessage({receiver: "background-worker", hideMiniplayerButton: event.target.checked});
+    chrome.runtime.sendMessage({receiver: "background-worker", "hideMiniplayerButton": event.target.checked});
 }
 
 var OnInputChanged_TheaterModeButton = (event) => {
-    chrome.runtime.sendMessage({receiver: "background-worker", hideTheaterModeButton: event.target.checked});
+    chrome.runtime.sendMessage({receiver: "background-worker", "hideTheaterModeButton": event.target.checked});
 }
 
 var OnInputChanged_FullscreenButton = (event) => {
-    chrome.runtime.sendMessage({receiver: "background-worker", hideFullscreenButton: event.target.checked});
+    chrome.runtime.sendMessage({receiver: "background-worker", "hideFullscreenButton": event.target.checked});
 }
 
 chrome.tabs.query({active: true, lastFocusedWindow: true}).then((tabs) => {
@@ -32,13 +32,13 @@ chrome.tabs.query({active: true, lastFocusedWindow: true}).then((tabs) => {
     }
 
     chrome.storage.local.get(["hideNextVideoButton", "hideVolumeControl", "hideAutoplayControl", "hideSubtitlesButton", "hideMiniplayerButton", "hideTheaterModeButton", "hideFullscreenButton"]).then((result) => {
-        document.getElementById("--tools-input-checkbox-next-video-button").checked = result.hideNextVideoButton;
-        document.getElementById("--tools-input-checkbox-volume-control").checked = result.hideVolumeControl;
-        document.getElementById("--tools-input-checkbox-autoplay-control").checked = result.hideAutoplayControl;
-        document.getElementById("--tools-input-checkbox-subtitles-button").checked = result.hideSubtitlesButton;
-        document.getElementById("--tools-input-checkbox-miniplayer-button").checked = result.hideMiniplayerButton;
-        document.getElementById("--tools-input-checkbox-theater-mode-button").checked = result.hideTheaterModeButton;
-        document.getElementById("--tools-input-checkbox-fullscreen-button").checked = result.hideFullscreenButton;
+        document.getElementById("--tools-input-checkbox-next-video-button").checked = result["hideNextVideoButton"];
+        document.getElementById("--tools-input-checkbox-volume-control").checked = result["hideVolumeControl"];
+        document.getElementById("--tools-input-checkbox-autoplay-control").checked = result["hideAutoplayControl"];
+        document.getElementById("--tools-input-checkbox-subtitles-button").checked = result["hideSubtitlesButton"];
+        document.getElementById("--tools-input-checkbox-miniplayer-button").checked = result["hideMiniplayerButton"];
+        document.getElementById("--tools-input-checkbox-theater-mode-button").checked = result["hideTheaterModeButton"];
+        document.getElementById("--tools-input-checkbox-fullscreen-button").checked = result["hideFullscreenButton"];
     });
 
     document.getElementById("--tools-input-checkbox-next-video-button").addEventListener("change", OnInputChanged_NextVideoButton);
