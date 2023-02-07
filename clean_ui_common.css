@@ -10,7 +10,7 @@
     border-radius: 0px !important;
 }
 
-#avatar, #avatar #img, #author-thumbnail #img {
+#avatar, #avatar #img, #author-thumbnail #img, #channel-thumbnail #img {
     border-radius: 50% !important;
 }
 
