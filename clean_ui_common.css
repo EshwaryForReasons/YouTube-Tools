@@ -10,7 +10,7 @@
     border-radius: 0px !important;
 }
 
-#avatar, #img {
+#avatar, #avatar #img, #author-thumbnail #img {
     border-radius: 50% !important;
 }
 
@@ -18,7 +18,7 @@
     display: none !important;
 }
 
-ytd-rich-grid-renderer > #header {
+ytd-two-column-browse-results-renderer[page-subtype = "home"] #header {
     display: none !important;
 }
 

@@ -22,7 +22,7 @@ ytd-ad-slot-renderer {
     display: none !important;
 }
 
-#scroll-container {
+yt-related-chip-cloud-renderer {
     display: none !important;
 }
 
@@ -91,6 +91,18 @@ ytd-subscription-notification-toggle-button-renderer-next .yt-spec-button-shape-
 
 ytd-watch-metadata[modern-metapanel] #description.ytd-watch-metadata {
     border-radius: 0px !important;
+}
+
+#clarify-box {
+    display: none !important;
+}
+
+ytd-metadata-row-container-renderer {
+    display: none !important;
+}
+
+ytd-merch-shelf-renderer {
+    display: none !important;
 }
 
 #simple-box {
