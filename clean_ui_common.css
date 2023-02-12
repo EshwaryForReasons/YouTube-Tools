@@ -10,7 +10,7 @@
     border-radius: 0px !important;
 }
 
-#avatar, #avatar #img, #author-thumbnail #img, #channel-thumbnail #img, #creator-thumbnail #img, #creator-heart #img, #hearted-thumbnail, ytd-guide-section-renderer #img {
+#avatar, #avatar #img, #author-thumbnail #img, #channel-thumbnail #img, #creator-thumbnail #img, #creator-heart #img, #hearted-thumbnail, ytd-guide-section-renderer #img, .ytd-recognition-shelf-renderer #img {
     border-radius: 50% !important;
 }
 
