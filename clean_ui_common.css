@@ -26,6 +26,10 @@ ytd-rich-section-renderer {
     display: none !important;
 }
 
+ytd-rich-section-renderer[aria-label = "--tools-tags-force-visible"] {
+    display: flex !important;
+}
+
 #footer {
     display: none !important;
 }

@@ -1,6 +1,6 @@
 var YouTubeTools = {
     messages: [],
-    elements: {}
+    elements: {},
 };
 
 var EToolsTags = Object.freeze({
@@ -15,6 +15,6 @@ var EContext = Object.freeze({
     Website: Symbol("--tools-custom-event-website")
 });
 
-YouTubeTools.DispatchEvent = function(SendToContext, Event) {
+var DispatchEvent = function(SendToContext, Event) {
     document.dispatchEvent(new CustomEvent(SendToContext.description, {detail: Event}));
 };

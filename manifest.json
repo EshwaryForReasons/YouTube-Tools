@@ -6,11 +6,19 @@
     "permissions": ["webNavigation", "scripting", "storage", "tabs"],
     "host_permissions": ["https://*.youtube.com/*"],
     "background": {
-        "service_worker": "main.js"
+        "service_worker": "main.js",
+        "type": "module"
     },
+    "content_scripts": [
+        {
+            "matches": ["https://*.youtube.com/*"],
+            "css": ["clean_ui_common.css", "clean_ui_watch_page.css"],
+            "js": ["core.js", "common.js", "watch_page.js", "home_page.js"]
+        }
+    ],
     "web_accessible_resources": [
         {
-            "resources": ["core.js", "scripts.js"],
+            "resources": ["core.js", "scripts.js", "settings.json"],
             "matches": ["https://*.youtube.com/*"]
         }
     ],

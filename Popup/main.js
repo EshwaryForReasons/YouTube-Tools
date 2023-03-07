@@ -1,51 +1,47 @@
-var OnInputChanged_NextVideoButton = (event) => {
-    chrome.runtime.sendMessage({receiver: "background-worker", "hideNextVideoButton": event.target.checked});
-}
-
-var OnInputChanged_VolumeControl = (event) => {
-    chrome.runtime.sendMessage({receiver: "background-worker", "hideVolumeControl": event.target.checked});
-}
-
-var OnInputChanged_AutoplayControl = (event) => {
-    chrome.runtime.sendMessage({receiver: "background-worker", "hideAutoplayControl": event.target.checked});
-}
-
-var OnInputChanged_SubtitlesButton = (event) => {
-    chrome.runtime.sendMessage({receiver: "background-worker", "hideSubtitlesButton": event.target.checked});
-}
-
-var OnInputChanged_MiniplayerButton = (event) => {
-    chrome.runtime.sendMessage({receiver: "background-worker", "hideMiniplayerButton": event.target.checked});
-}
-
-var OnInputChanged_TheaterModeButton = (event) => {
-    chrome.runtime.sendMessage({receiver: "background-worker", "hideTheaterModeButton": event.target.checked});
-}
-
-var OnInputChanged_FullscreenButton = (event) => {
-    chrome.runtime.sendMessage({receiver: "background-worker", "hideFullscreenButton": event.target.checked});
-}
-
-chrome.tabs.query({active: true, lastFocusedWindow: true}).then((tabs) => {
-    if(!location.href.includes("user_interface.html") || !tabs[0] && tabs[0].url.includes("youtube.com/watch?")) {
+chrome.tabs.query({active: true, lastFocusedWindow: true}).then(async (tabs) => {
+    if(!location.href.includes("user_interface.html") || !tabs[0] || !tabs[0].url.includes("youtube.com")) {
         return;
     }
 
-    chrome.storage.local.get(["hideNextVideoButton", "hideVolumeControl", "hideAutoplayControl", "hideSubtitlesButton", "hideMiniplayerButton", "hideTheaterModeButton", "hideFullscreenButton"]).then((result) => {
-        document.getElementById("--tools-input-checkbox-next-video-button").checked = result["hideNextVideoButton"];
-        document.getElementById("--tools-input-checkbox-volume-control").checked = result["hideVolumeControl"];
-        document.getElementById("--tools-input-checkbox-autoplay-control").checked = result["hideAutoplayControl"];
-        document.getElementById("--tools-input-checkbox-subtitles-button").checked = result["hideSubtitlesButton"];
-        document.getElementById("--tools-input-checkbox-miniplayer-button").checked = result["hideMiniplayerButton"];
-        document.getElementById("--tools-input-checkbox-theater-mode-button").checked = result["hideTheaterModeButton"];
-        document.getElementById("--tools-input-checkbox-fullscreen-button").checked = result["hideFullscreenButton"];
+    //Retrieve array of settings and relevant data to update the options for
+    const SettingsData = await (await fetch(chrome.runtime.getURL("./settings.json"))).json();
+    //Array of settings to get info of from storage
+    let SettingsToRetrieve = [];
+    //Array of settings and relevant data to update all options and initialize event handlers
+    let SettingsAndData = [];
+    Object.keys(SettingsData).forEach((Section) => {
+        SettingsData[Section].forEach((IndividualSetting) => {
+            SettingsToRetrieve.push(IndividualSetting["Setting"]);
+            SettingsAndData.push({
+                Setting: IndividualSetting["Setting"],
+                SettingsOptionIdentifier: IndividualSetting["SettingsOptionIdentifier"],
+                Name: IndividualSetting["Name"],
+                Type: IndividualSetting["Type"]
+            });
+        });
     });
 
-    document.getElementById("--tools-input-checkbox-next-video-button").addEventListener("change", OnInputChanged_NextVideoButton);
-    document.getElementById("--tools-input-checkbox-volume-control").addEventListener("change", OnInputChanged_VolumeControl);
-    document.getElementById("--tools-input-checkbox-autoplay-control").addEventListener("change", OnInputChanged_AutoplayControl);
-    document.getElementById("--tools-input-checkbox-subtitles-button").addEventListener("change", OnInputChanged_SubtitlesButton);
-    document.getElementById("--tools-input-checkbox-miniplayer-button").addEventListener("change", OnInputChanged_MiniplayerButton);
-    document.getElementById("--tools-input-checkbox-theater-mode-button").addEventListener("change", OnInputChanged_TheaterModeButton);
-    document.getElementById("--tools-input-checkbox-fullscreen-button").addEventListener("change", OnInputChanged_FullscreenButton);
+    //Create the options menu
+    SettingsAndData.forEach((IndividualSetting) => {
+        let div = Object.assign(document.createElement("div"), {className: "option"});
+        div.appendChild(Object.assign(document.createElement("h3"), {className: "label", innerHTML: IndividualSetting.Name}));
+        let label = Object.assign(document.createElement("label"), {className: "switch"});
+        label.appendChild(Object.assign(document.createElement("input"), {id: IndividualSetting.SettingsOptionIdentifier, type: IndividualSetting.Type}));
+        label.appendChild(Object.assign(document.createElement("span"), {className: "slider"}));
+        div.appendChild(label);
+        document.getElementsByClassName("options-container")[0].appendChild(div);
+    });
+
+    //Retrieve settings and update all options
+    chrome.storage.local.get(SettingsToRetrieve).then((result) => {
+        SettingsAndData.forEach((IndividualSetting) => {
+            document.getElementById(IndividualSetting.SettingsOptionIdentifier).checked = result[IndividualSetting.Setting];
+
+            //Add event listeners here to avoid extra forEach
+            document.getElementById(IndividualSetting.SettingsOptionIdentifier).addEventListener("change", (event) => {
+                //Send message to background worker when the checked status is changed
+                chrome.runtime.sendMessage({receiver: "background-worker", [IndividualSetting.Setting]: event.target.checked});
+            });
+        });
+    });
 });

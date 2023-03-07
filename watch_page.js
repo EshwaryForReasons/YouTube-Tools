@@ -1,5 +1,3 @@
-var clamp = (num, min, max) => Math.min(Math.max(num, min), max);
-
 (() => {
     let IsLargePlayer = false;
     let VolumeDisplayTimeoutId;
@@ -10,32 +8,32 @@ var clamp = (num, min, max) => Math.min(Math.max(num, min), max);
         }
     });
 
-    chrome.runtime.onMessage.addListener((message) => {
+    chrome.runtime.onMessage.addListener(async (message) => {
         if(message.receiver !== "extension") {
             return;
         }
 
-        if(message.hideNextVideoButton !== undefined) {
-            document.getElementsByClassName("ytp-next-button")[0].ariaLabel = message["hideNextVideoButton"] ? EToolsTags.NotVisible : EToolsTags.NONE;
+        if (message.request === "setupEventListeners") {
+            SetupEventListeners();
+            return;
         }
-        if(message.hideVolumeControl !== undefined) {
-            document.getElementsByClassName("ytp-volume-area")[0].ariaLabel = message["hideVolumeControl"] ? EToolsTags.NotVisible : EToolsTags.NONE;
+        if (message.request === "removeEventListeners") {
+            RemoveEventListeners();
+            return;
         }
-        if(message.hideAutoplayControl !== undefined) {
-            document.getElementsByClassName("ytp-autonav-toggle-button-container")[0].ariaLabel = message["hideAutoplayControl"] ? EToolsTags.NotVisible : EToolsTags.NONE;
-        }
-        if(message.hideSubtitlesButton !== undefined) {
-            document.getElementsByClassName("ytp-subtitles-button")[0].ariaLabel = message["hideSubtitlesButton"] ? EToolsTags.NotVisible : EToolsTags.NONE;
-        }
-        if(message.hideMiniplayerButton !== undefined) {
-            document.getElementsByClassName("ytp-miniplayer-button")[0].ariaLabel = message["hideMiniplayerButton"] ? EToolsTags.NotVisible : EToolsTags.NONE;
-        }
-        if(message.hideTheaterModeButton !== undefined) {
-            document.getElementsByClassName("ytp-size-button")[0].ariaLabel = message["hideTheaterModeButton"] ? EToolsTags.NotVisible : EToolsTags.NONE;
-        }
-        if(message.hideFullscreenButton !== undefined) {
-            document.getElementsByClassName("ytp-fullscreen-button")[0].ariaLabel = message["hideFullscreenButton"] ? EToolsTags.NotVisible : EToolsTags.NONE;
-        }
+
+        //Retrieve settings
+        let SettingsData = await (await fetch(chrome.runtime.getURL("./settings.json"))).json();
+        Object.keys(SettingsData).forEach((Section) => {
+            SettingsData[Section].forEach((IndividualSetting) => {
+                //Update the visibility of the element
+                if(message[IndividualSetting.Setting] !== undefined) {
+                    if(IndividualSetting.IdentifierType === "ClassName") {
+                        document.getElementsByClassName(IndividualSetting.Identifier)[0].ariaLabel = message[IndividualSetting.Setting] ? EToolsTags.NONE : EToolsTags.ForceVisible;
+                    }
+                }
+            });
+        });
     });
 
     //Youtube Player
@@ -43,11 +41,18 @@ var clamp = (num, min, max) => Math.min(Math.max(num, min), max);
     const ToggleEnlargePlayer = () => {
         IsLargePlayer = !IsLargePlayer;
 
-        //Remove topbar
         document.getElementById("masthead-container").ariaDisabled = IsLargePlayer.toString();
 
         //Enable theater mode because it handles moving extra content out of the way for us
         document.getElementsByClassName("ytp-size-button")[0].click();
+    }
+
+    const FixHeaderVisibility = () => {
+        //Update IsLargePlayer based on whether the player is in theater mode or not
+        if(document.getElementById("player-theater-container")) {
+            IsLargePlayer = document.getElementById("player-theater-container").childElementCount > 0;
+            document.getElementById("masthead-container").ariaDisabled = IsLargePlayer.toString();
+        }
     }
 
     //Volume
@@ -83,34 +88,29 @@ var clamp = (num, min, max) => Math.min(Math.max(num, min), max);
     const ScrollCallback = (event) => {
         event.preventDefault();
         const PreviousDelta = event.deltaY < 0 ? 5 : -5;
-        YouTubeTools.DispatchEvent(EContext.Website, {changeVolume: PreviousDelta, reportNew: true});
+        DispatchEvent(EContext.Website, {changeVolume: PreviousDelta, reportNew: true});
     };
 
-    //Inject relevant scripts
-    const website_insert_scripts = ["core.js", "scripts.js"];
-    website_insert_scripts.forEach((script) => {
-        var ScriptElement = document.createElement("script");
-        ScriptElement.src = chrome.runtime.getURL(script);
-        (document.head || document.documentElement).appendChild(ScriptElement);
-    });
+    //Event listeners
 
-    if(location.href.includes("youtube.com/watch?")) {
-        //Setup event listners
+    const Initialize = () => {
+        //Disable subtitles by default
+        DispatchEvent(EContext.Website, {setSubtitlesEnabled: false});
+        FixHeaderVisibility();
+    };
+
+    const SetupEventListeners = () => {
         document.body.addEventListener("contextmenu", RightClickCallback, true);
         document.getElementsByClassName("video-stream")[0].addEventListener("wheel", ScrollCallback, false);
+    };
 
-        //Disable subtitles by default
-        YouTubeTools.DispatchEvent(EContext.Website, {setSubtitlesEnabled: false});
-    }
-    else {
-        //Remove event listners
+    const RemoveEventListeners = () => {
         document.body.removeEventListener("contextmenu", RightClickCallback, true);
 
         if(document.getElementsByClassName("video-stream")[0]) {
             document.getElementsByClassName("video-stream")[0].removeEventListener("wheel", ScrollCallback, false);
         }
-    }
+    };
 
-    //Update all settings
-    chrome.runtime.sendMessage({receiver: "background-worker", request: "UpdateSettings"});
+    setTimeout(Initialize, 500);
 })();

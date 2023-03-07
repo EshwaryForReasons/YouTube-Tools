@@ -111,32 +111,60 @@ ytd-merch-shelf-renderer {
 
 /**YouTube Controls*/
 
-.ytp-next-button[aria-label = "--tools-tags-not-visible"] {
+.ytp-next-button {
     display: none !important;
 }
 
-.ytp-volume-area[aria-label = "--tools-tags-not-visible"] {
+.ytp-next-button[aria-label = "--tools-tags-force-visible"] {
+    display: inherit !important;
+}
+
+.ytp-volume-area {
     display: none !important;
 }
 
-.ytp-autonav-toggle-button-container[aria-label = "--tools-tags-not-visible"] {
+.ytp-volume-area[aria-label = "--tools-tags-force-visible"] {
+    display: inherit !important;
+}
+
+.ytp-autonav-toggle-button-container {
     display: none !important;
 }
 
-.ytp-subtitles-button[aria-label = "--tools-tags-not-visible"] {
+.ytp-autonav-toggle-button-container[aria-label = "--tools-tags-force-visible"] {
+    display: inherit !important;
+}
+
+.ytp-subtitles-button {
     display: none !important;
 }
 
-.ytp-miniplayer-button[aria-label = "--tools-tags-not-visible"] {
+.ytp-subtitles-button[aria-label = "--tools-tags-force-visible"] {
+    display: inline-block !important;
+}
+
+.ytp-miniplayer-button {
     display: none !important;
 }
 
-.ytp-size-button[aria-label = "--tools-tags-not-visible"] {
+.ytp-miniplayer-button[aria-label = "--tools-tags-force-visible"] {
+    display: inline-block !important;
+}
+
+.ytp-size-button {
     display: none !important;
 }
 
-.ytp-fullscreen-button[aria-label = "--tools-tags-not-visible"] {
+.ytp-size-button[aria-label = "--tools-tags-force-visible"] {
+    display: inline-block !important;
+}
+
+.ytp-fullscreen-button {
     display: none !important;
+}
+
+.ytp-fullscreen-button[aria-label = "--tools-tags-force-visible"] {
+    display: inline-block !important;
 }
 
 .ytp-menuitem[role = "menuitemcheckbox"] {

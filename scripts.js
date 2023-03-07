@@ -45,6 +45,7 @@ var SetPlayerVolume = (event, NewVolume) => {
 
 var SetSubtitlesEnabled = (event, IsEnabled) => {
     EnsureVariables();
+    
     if(IsEnabled) {
         YouTubeTools.elements.player.toggleSubtitlesOn();
     }
