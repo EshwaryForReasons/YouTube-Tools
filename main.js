@@ -1,14 +1,28 @@
-const RetrieveSettingsFromSettingsData = async () => {
-    let SettingsData = await (await fetch(chrome.runtime.getURL("./settings.json"))).json();
-    let SettingsToRetrieve = [];
-    Object.keys(SettingsData).forEach((Section) => {
-        SettingsData[Section].forEach((Setting) => {
-            SettingsToRetrieve.push(Setting["Setting"]);
+let SettingsData = undefined;
+let SettingsToRetrieve = [];
+
+const GetSettingsData = async () => {
+    if(SettingsData === undefined) {
+        SettingsData = await (await fetch(chrome.runtime.getURL("./settings.json"))).json();
+    }
+
+    return SettingsData;
+};
+
+const GetSettingsToRetrieve = async () => {
+    //Make sure the SettingsData is set
+    await GetSettingsData();
+
+    if(SettingsToRetrieve.length === 0) {
+        Object.keys(SettingsData["UserInterface"]["Data"]).forEach((Section) => {
+            SettingsData["UserInterface"]["Data"][Section].forEach((IndividualSetting) => {
+                SettingsToRetrieve.push(IndividualSetting.Setting);
+            });
         });
-    });
+    }
 
     return SettingsToRetrieve;
-}
+};
 
 const SendMessageToTab = (message) => {
     chrome.tabs.query({active: true, lastFocusedWindow: true}).then((tabs) => {
@@ -20,7 +34,7 @@ const SendMessageToTab = (message) => {
 
 const UpdateSettings = async () => {
     //Array of settings to update, retrieved from JSON data
-    const SettingsToRetrieve = await RetrieveSettingsFromSettingsData();
+    const SettingsToRetrieve = await GetSettingsToRetrieve();
     chrome.storage.local.get(SettingsToRetrieve).then((result) => {
         SettingsToRetrieve.forEach((Setting) => {
             SendMessageToTab({receiver: "extension", [Setting]: result[Setting]});
@@ -48,7 +62,7 @@ chrome.runtime.onMessage.addListener(async (message) => {
         return;
     }
 
-    const SettingsToRetrieve = await RetrieveSettingsFromSettingsData();
+    const SettingsToRetrieve = await GetSettingsToRetrieve();
     SettingsToRetrieve.forEach((Setting) => {
         if(message[Setting] !== undefined) {
             chrome.storage.local.set({[Setting]: message[Setting]});

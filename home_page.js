@@ -1,4 +1,8 @@
 (() => {
+    if(location.href.includes("youtube.com/watch?")) {
+        return;
+    }
+
     chrome.runtime.onMessage.addListener((message) => {
         if(message.receiver !== "extension") {
             return;

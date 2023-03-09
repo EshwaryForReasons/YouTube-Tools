@@ -13,6 +13,9 @@ document.addEventListener(EContext.Website.description, (event) => {
     if(event.detail.changeVolume !== undefined) {
         ChangePlayerVolume(event, event.detail.changeVolume);
     }
+    if(event.detail.changeQuality !== undefined) {
+        ChangePlaybackQuality(event, event.detail.newQuality);
+    }
     if(event.detail.request !== undefined) {
         if(event.detail.request === "GetVolume") {
             GetPlayerVolume(event);            
@@ -64,6 +67,10 @@ var ChangePlayerVolume = (event, Delta) => {
     if(event.detail.reportNew === true) {
         YouTubeTools.DispatchEvent(EContext.Extension, {newVolume: YouTubeTools.elements.player.getVolume()})
     }
+};
+
+var ChangePlaybackQuality = (event, newQuality) => {
+    YouTubeTools.elements.player.setPlaybackQualityRange(newQuality.description);
 };
 
 EnsureVariables();

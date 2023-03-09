@@ -1,6 +1,13 @@
-(() => {
+(async () => {
+    if(!location.href.includes("youtube.com/watch?")) {
+        return;
+    }
+
     let IsLargePlayer = false;
     let VolumeDisplayTimeoutId;
+
+    //Retrieve settings. Do once here since this is static
+    const SettingsData = await (await fetch(chrome.runtime.getURL("./settings.json"))).json();
 
     document.addEventListener(EContext.Extension.description, (event) => {
         if(event.detail.newVolume !== undefined) {
@@ -22,10 +29,8 @@
             return;
         }
 
-        //Retrieve settings
-        let SettingsData = await (await fetch(chrome.runtime.getURL("./settings.json"))).json();
-        Object.keys(SettingsData).forEach((Section) => {
-            SettingsData[Section].forEach((IndividualSetting) => {
+        Object.keys(SettingsData["UserInterface"]["Data"]).forEach((Section) => {
+            SettingsData["UserInterface"]["Data"][Section].forEach((IndividualSetting) => {
                 //Update the visibility of the element
                 if(message[IndividualSetting.Setting] !== undefined) {
                     if(IndividualSetting.IdentifierType === "ClassName") {
@@ -96,6 +101,8 @@
     const Initialize = () => {
         //Disable subtitles by default
         DispatchEvent(EContext.Website, {setSubtitlesEnabled: false});
+        //Auto hd
+        DispatchEvent(EContext.Website, {newQuality: EContext.p1080});
         FixHeaderVisibility();
     };
 

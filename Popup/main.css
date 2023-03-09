@@ -54,6 +54,13 @@ body {
     width: 100%;
 }
 
+.options-container .section_label {
+    border-bottom: solid #444444;
+    padding-bottom: 10px;
+    width: 100%;
+    font-size: 1.25rem;
+}
+
 .option {
     display: flex;
     flex-direction: row;

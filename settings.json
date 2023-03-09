@@ -1,70 +1,99 @@
 {
-    "WatchPage": [
-        {
-            "Name": "Hide Next Video Button",
-            "Setting": "hideNextVideoButton",
-            "Identifier": "ytp-next-button",
-            "IdentifierType": "ClassName",
-            "SettingsOptionIdentifier": "--tools-input-checkbox-next-video-button",
-            "Type": "checkbox"
-        },
-        {
-            "Name": "Hide Volume Control",
-            "Setting": "hideVolumeControl",
-            "Identifier": "ytp-volume-area",
-            "IdentifierType": "ClassName",
-            "SettingsOptionIdentifier": "--tools-input-checkbox-volume-control",
-            "Type": "checkbox"
-        },
-        {
-            "Name": "Hide Autoplay Control",
-            "Setting": "hideAutoplayControl",
-            "Identifier": "ytp-autonav-toggle-button-container",
-            "IdentifierType": "ClassName",
-            "SettingsOptionIdentifier": "--tools-input-checkbox-autoplay-control",
-            "Type": "checkbox"
-        },
-        {
-            "Name": "Hide Subtitles Button",
-            "Setting": "hideSubtitlesButton",
-            "Identifier": "ytp-subtitles-button",
-            "IdentifierType": "ClassName",
-            "SettingsOptionIdentifier": "--tools-input-checkbox-subtitles-button",
-            "Type": "checkbox"
-        },
-        {
-            "Name": "Hide Miniplayer Button",
-            "Setting": "hideMiniplayerButton",
-            "Identifier": "ytp-miniplayer-button",
-            "IdentifierType": "ClassName",
-            "SettingsOptionIdentifier": "--tools-input-checkbox-miniplayer-button",
-            "Type": "checkbox"
-        },
-        {
-            "Name": "Hide Theater Mode Button",
-            "Setting": "hideTheaterModeButton",
-            "Identifier": "ytp-size-button",
-            "IdentifierType": "ClassName",
-            "SettingsOptionIdentifier": "--tools-input-checkbox-theater-mode-button",
-            "Type": "checkbox"
-        },
-        {
-            "Name": "Hide Fullscreen Button",
-            "Setting": "hideFullscreenButton",
-            "Identifier": "ytp-fullscreen-button",
-            "IdentifierType": "ClassName",
-            "SettingsOptionIdentifier": "--tools-input-checkbox-fullscreen-button",
-            "Type": "checkbox"
+    "UserInterface": {
+        "Name": "User Interface",
+        "Page": "user_interface.html",
+        "Data": {
+            "Watch Page": [
+                {
+                    "Name": "Hide Next Video Button",
+                    "Setting": "hideNextVideoButton",
+                    "Identifier": "ytp-next-button",
+                    "IdentifierType": "ClassName",
+                    "SettingsOptionIdentifier": "--tools-input-checkbox-next-video-button",
+                    "Type": "checkbox"
+                },
+                {
+                    "Name": "Hide Volume Control",
+                    "Setting": "hideVolumeControl",
+                    "Identifier": "ytp-volume-area",
+                    "IdentifierType": "ClassName",
+                    "SettingsOptionIdentifier": "--tools-input-checkbox-volume-control",
+                    "Type": "checkbox"
+                },
+                {
+                    "Name": "Hide Autoplay Control",
+                    "Setting": "hideAutoplayControl",
+                    "Identifier": "ytp-autonav-toggle-button-container",
+                    "IdentifierType": "ClassName",
+                    "SettingsOptionIdentifier": "--tools-input-checkbox-autoplay-control",
+                    "Type": "checkbox"
+                },
+                {
+                    "Name": "Hide Subtitles Button",
+                    "Setting": "hideSubtitlesButton",
+                    "Identifier": "ytp-subtitles-button",
+                    "IdentifierType": "ClassName",
+                    "SettingsOptionIdentifier": "--tools-input-checkbox-subtitles-button",
+                    "Type": "checkbox"
+                },
+                {
+                    "Name": "Hide Miniplayer Button",
+                    "Setting": "hideMiniplayerButton",
+                    "Identifier": "ytp-miniplayer-button",
+                    "IdentifierType": "ClassName",
+                    "SettingsOptionIdentifier": "--tools-input-checkbox-miniplayer-button",
+                    "Type": "checkbox"
+                },
+                {
+                    "Name": "Hide Theater Mode Button",
+                    "Setting": "hideTheaterModeButton",
+                    "Identifier": "ytp-size-button",
+                    "IdentifierType": "ClassName",
+                    "SettingsOptionIdentifier": "--tools-input-checkbox-theater-mode-button",
+                    "Type": "checkbox"
+                },
+                {
+                    "Name": "Hide Fullscreen Button",
+                    "Setting": "hideFullscreenButton",
+                    "Identifier": "ytp-fullscreen-button",
+                    "IdentifierType": "ClassName",
+                    "SettingsOptionIdentifier": "--tools-input-checkbox-fullscreen-button",
+                    "Type": "checkbox"
+                }
+            ],
+            "Home Page": [
+                {
+                    "Name": "Hide Shorts Section",
+                    "Setting": "hideShortsSection",
+                    "Identifier": "ytd-rich-section-renderer",
+                    "IdentifierType": "TagName",
+                    "SettingsOptionIdentifier": "--tools-input-checkbox-shorts-section",
+                    "Type": "checkbox"
+                }
+            ]
+        }  
+    },
+    "Functions": {
+        "Name": "Functions",
+        "Page": "functions.html",
+        "Data": {
+            "Quality": [
+                {
+                    "Name": "Default Quality",
+                    "Setting": "defaultQuality",
+                    "SettingsOptionIdentifier": "--tools-input-dropdown-default-quality",
+                    "Type": "dropdown",
+                    "Options": [
+                        "NONE",
+                        "144",
+                        "240",
+                        "360",
+                        "480",
+                        "720",
+                        "1080"
+                    ]
+                }
+            ]
         }
-    ],
-    "HomePage": [
-        {
-            "Name": "Hide Shorts Section",
-            "Setting": "hideShortsSection",
-            "Identifier": "ytd-rich-section-renderer",
-            "IdentifierType": "TagName",
-            "SettingsOptionIdentifier": "--tools-input-checkbox-shorts-section",
-            "Type": "checkbox"
-        }
-    ]
+    }
 }
