@@ -1,7 +1,11 @@
 (async () => {
-    if(!location.href.includes("youtube.com/watch?")) {
-        return;
-    }
+    const EnsureCorrectPage = () => {
+        if(location.href.includes("youtube.com/watch?")) {
+            return true;
+        }
+
+        return false;
+    };    
 
     let IsLargePlayer = false;
     let VolumeDisplayTimeoutId;
@@ -16,7 +20,7 @@
     });
 
     chrome.runtime.onMessage.addListener(async (message) => {
-        if(message.receiver !== "extension") {
+        if(!EnsureCorrectPage() || message.receiver !== "extension") {
             return;
         }
 
@@ -44,6 +48,10 @@
     //Youtube Player
 
     const ToggleEnlargePlayer = () => {
+        if(!EnsureCorrectPage()) {
+            return;
+        }
+
         IsLargePlayer = !IsLargePlayer;
 
         document.getElementById("masthead-container").ariaDisabled = IsLargePlayer.toString();
@@ -53,6 +61,10 @@
     }
 
     const FixHeaderVisibility = () => {
+        if(!EnsureCorrectPage()) {
+            return;
+        }
+
         //Update IsLargePlayer based on whether the player is in theater mode or not
         if(document.getElementById("player-theater-container")) {
             IsLargePlayer = document.getElementById("player-theater-container").childElementCount > 0;
@@ -63,6 +75,10 @@
     //Volume
 
     const UpdateVolumeDisplay = (NewVolume) => {
+        if(!EnsureCorrectPage()) {
+            return;
+        }
+        
         const MoviePlayer = document.getElementById("movie_player");
         let VolumeDisplay = document.getElementById("--tools-volume-display");
 
@@ -83,6 +99,10 @@
     //Callbacks
 
     const RightClickCallback = (event) => {
+        if(!EnsureCorrectPage()) {
+            return;
+        }
+
         const rect = document.getElementsByClassName("html5-video-player")[0].getBoundingClientRect();
         if(event.clientY <= rect.top || event.clientY >= rect.bottom || event.clientX >= rect.right) return;
 
@@ -91,6 +111,10 @@
     };
 
     const ScrollCallback = (event) => {
+        if(!EnsureCorrectPage()) {
+            return;
+        }
+
         event.preventDefault();
         const PreviousDelta = event.deltaY < 0 ? 5 : -5;
         DispatchEvent(EContext.Website, {changeVolume: PreviousDelta, reportNew: true});
@@ -99,6 +123,10 @@
     //Event listeners
 
     const Initialize = () => {
+        if(!EnsureCorrectPage()) {
+            return;
+        }
+        
         //Disable subtitles by default
         DispatchEvent(EContext.Website, {setSubtitlesEnabled: false});
         //Auto hd
@@ -107,11 +135,19 @@
     };
 
     const SetupEventListeners = () => {
+        if(!EnsureCorrectPage()) {
+            return;
+        }
+
         document.body.addEventListener("contextmenu", RightClickCallback, true);
         document.getElementsByClassName("video-stream")[0].addEventListener("wheel", ScrollCallback, false);
     };
 
     const RemoveEventListeners = () => {
+        if(!EnsureCorrectPage()) {
+            return;
+        }
+        
         document.body.removeEventListener("contextmenu", RightClickCallback, true);
 
         if(document.getElementsByClassName("video-stream")[0]) {

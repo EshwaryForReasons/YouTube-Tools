@@ -1,10 +1,14 @@
 (() => {
-    if(location.href.includes("youtube.com/watch?")) {
-        return;
-    }
+    const EnsureCorrectPage = () => {
+        if(!location.href.includes("youtube.com/watch?") && location.href.includes("youtube.com/results?")) {
+            return true;
+        }
+
+        return false;
+    };    
 
     chrome.runtime.onMessage.addListener((message) => {
-        if(message.receiver !== "extension") {
+        if(!EnsureCorrectPage() || message.receiver !== "extension") {
             return;
         }
 

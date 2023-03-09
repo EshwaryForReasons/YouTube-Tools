@@ -48,9 +48,28 @@ const OnTabUrlChanged = async () => {
     SendMessageToTab({receiver: "extension", request: "setupEventListeners"});
 };
 
-chrome.tabs.onUpdated.addListener((tabId, updateInfo, tab) => {OnTabUrlChanged();});
-chrome.tabs.onActivated.addListener((activeInfo) => {OnTabUrlChanged();});
-chrome.windows.onFocusChanged.addListener((windowId) => {OnTabUrlChanged();})
+chrome.tabs.onUpdated.addListener((tabId, updateInfo, tab) => {
+    //Only update if the url changed
+    if(updateInfo.url) {
+        OnTabUrlChanged();
+    }
+});
+chrome.tabs.onActivated.addListener((activeInfo) => {
+    //Find the tab associated with the tabId and update if it is a YouTube tab
+    chrome.tabs.get(activeInfo.tabId, (tab) => {
+        if(tab && tab.url.includes("youtube.com")) {
+            OnTabUrlChanged();
+        }
+    });
+});
+chrome.windows.onFocusChanged.addListener((windowId) => {
+    //Find the current tab and update if the YouTube tab is selected
+    chrome.tabs.query({active: true, lastFocusedWindow: true}).then((tabs) => {
+        if(tabs[0] && tabs[0].url.includes("youtube.com")) {
+            OnTabUrlChanged();
+        }
+    });
+})
 
 chrome.runtime.onMessage.addListener(async (message) => {
     if(message.receiver !== "background-worker") {
