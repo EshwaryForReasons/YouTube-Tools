@@ -19,30 +19,37 @@
         }
     });
 
-    chrome.runtime.onMessage.addListener(async (message) => {
+    chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
         if(!EnsureCorrectPage() || message.receiver !== "extension") {
             return;
         }
 
-        if (message.request === "setupEventListeners") {
-            SetupEventListeners();
-            return;
-        }
-        if (message.request === "removeEventListeners") {
-            RemoveEventListeners();
-            return;
-        }
+        if(message.request) {
+            message.request.forEach((request) => {
+                if (request === "setupEventListeners") {
+                    SetupEventListeners();
+                }
+                else if (request === "removeEventListeners") {
+                    RemoveEventListeners();
+                }
+            });
 
+            sendResponse("Success: watch_page.js");
+            return;
+        }
+        
         Object.keys(SettingsData["UserInterface"]["Data"]).forEach((Section) => {
             SettingsData["UserInterface"]["Data"][Section].forEach((IndividualSetting) => {
                 //Update the visibility of the element
-                if(message[IndividualSetting.Setting] !== undefined) {
-                    if(IndividualSetting.IdentifierType === "ClassName") {
+                if (message[IndividualSetting.Setting] !== undefined) {
+                    if (IndividualSetting.IdentifierType === "ClassName") {
                         document.getElementsByClassName(IndividualSetting.Identifier)[0].ariaLabel = message[IndividualSetting.Setting] ? EToolsTags.NONE : EToolsTags.ForceVisible;
                     }
                 }
             });
         });
+
+        sendResponse("Success: watch_page.js");
     });
 
     //Youtube Player

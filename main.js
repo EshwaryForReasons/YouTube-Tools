@@ -13,12 +13,15 @@ const GetSettingsToRetrieve = async () => {
     //Make sure the SettingsData is set
     await GetSettingsData();
 
+    SettingsToRetrieve = [];
     if(SettingsToRetrieve.length === 0) {
-        Object.keys(SettingsData["UserInterface"]["Data"]).forEach((Section) => {
-            SettingsData["UserInterface"]["Data"][Section].forEach((IndividualSetting) => {
-                SettingsToRetrieve.push(IndividualSetting.Setting);
+        Object.keys(SettingsData).forEach((Menu) => {
+            Object.keys(SettingsData[Menu]["Data"]).forEach((Section) => {
+                SettingsData[Menu]["Data"][Section].forEach((IndividualSetting) => {
+                    SettingsToRetrieve.push(IndividualSetting.Setting);
+                });
             });
-        });
+        });        
     }
 
     return SettingsToRetrieve;
@@ -27,7 +30,9 @@ const GetSettingsToRetrieve = async () => {
 const SendMessageToTab = (message) => {
     chrome.tabs.query({active: true, lastFocusedWindow: true}).then((tabs) => {
         if(tabs[0] && tabs[0].url.includes("youtube.com")) {
-            chrome.tabs.sendMessage(tabs[0].id, message);
+            chrome.tabs.sendMessage(tabs[0].id, message, (response) => {
+                console.log(response, chrome.runtime.lastError);
+            });
         }
     });
 };
@@ -36,21 +41,30 @@ const UpdateSettings = async () => {
     //Array of settings to update, retrieved from JSON data
     const SettingsToRetrieve = await GetSettingsToRetrieve();
     chrome.storage.local.get(SettingsToRetrieve).then((result) => {
+        //Create full payload so we only have to send the message once
+        let UpdateSettingsMessage = {receiver: "extension"};
         SettingsToRetrieve.forEach((Setting) => {
-            SendMessageToTab({receiver: "extension", [Setting]: result[Setting]});
+            UpdateSettingsMessage[Setting] = result[Setting];
         });
+
+        SendMessageToTab(UpdateSettingsMessage);
     });
 };
 
 const OnTabUrlChanged = async () => {
     UpdateSettings();
-    SendMessageToTab({receiver: "extension", request: "injectRelevantScripts"});
-    SendMessageToTab({receiver: "extension", request: "setupEventListeners"});
+    SendMessageToTab({
+        receiver: "extension", 
+        request: [
+            "injectRelevantScripts",
+            "setupEventListeners"
+        ]
+    });
 };
 
 chrome.tabs.onUpdated.addListener((tabId, updateInfo, tab) => {
     //Only update if the url changed
-    if(updateInfo.url) {
+    if(updateInfo.url || updateInfo.status === "complete") {
         OnTabUrlChanged();
     }
 });
@@ -71,13 +85,8 @@ chrome.windows.onFocusChanged.addListener((windowId) => {
     });
 })
 
-chrome.runtime.onMessage.addListener(async (message) => {
+chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     if(message.receiver !== "background-worker") {
-        return;
-    }
-
-    if(message.request === "UpdateSettings") {
-        UpdateSettings();
         return;
     }
 
@@ -88,4 +97,6 @@ chrome.runtime.onMessage.addListener(async (message) => {
             SendMessageToTab({receiver: "extension", [Setting]: message[Setting]});
         }
     });
+
+    sendResponse("Success: main.js");
 });

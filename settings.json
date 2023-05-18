@@ -1,7 +1,6 @@
 {
     "UserInterface": {
         "Name": "User Interface",
-        "Page": "user_interface.html",
         "Data": {
             "Watch Page": [
                 {
@@ -9,7 +8,6 @@
                     "Setting": "hideNextVideoButton",
                     "Identifier": "ytp-next-button",
                     "IdentifierType": "ClassName",
-                    "SettingsOptionIdentifier": "--tools-input-checkbox-next-video-button",
                     "Type": "checkbox"
                 },
                 {
@@ -17,7 +15,6 @@
                     "Setting": "hideVolumeControl",
                     "Identifier": "ytp-volume-area",
                     "IdentifierType": "ClassName",
-                    "SettingsOptionIdentifier": "--tools-input-checkbox-volume-control",
                     "Type": "checkbox"
                 },
                 {
@@ -25,7 +22,6 @@
                     "Setting": "hideAutoplayControl",
                     "Identifier": "ytp-autonav-toggle-button-container",
                     "IdentifierType": "ClassName",
-                    "SettingsOptionIdentifier": "--tools-input-checkbox-autoplay-control",
                     "Type": "checkbox"
                 },
                 {
@@ -33,7 +29,6 @@
                     "Setting": "hideSubtitlesButton",
                     "Identifier": "ytp-subtitles-button",
                     "IdentifierType": "ClassName",
-                    "SettingsOptionIdentifier": "--tools-input-checkbox-subtitles-button",
                     "Type": "checkbox"
                 },
                 {
@@ -41,7 +36,6 @@
                     "Setting": "hideMiniplayerButton",
                     "Identifier": "ytp-miniplayer-button",
                     "IdentifierType": "ClassName",
-                    "SettingsOptionIdentifier": "--tools-input-checkbox-miniplayer-button",
                     "Type": "checkbox"
                 },
                 {
@@ -49,7 +43,6 @@
                     "Setting": "hideTheaterModeButton",
                     "Identifier": "ytp-size-button",
                     "IdentifierType": "ClassName",
-                    "SettingsOptionIdentifier": "--tools-input-checkbox-theater-mode-button",
                     "Type": "checkbox"
                 },
                 {
@@ -57,7 +50,6 @@
                     "Setting": "hideFullscreenButton",
                     "Identifier": "ytp-fullscreen-button",
                     "IdentifierType": "ClassName",
-                    "SettingsOptionIdentifier": "--tools-input-checkbox-fullscreen-button",
                     "Type": "checkbox"
                 }
             ],
@@ -67,7 +59,6 @@
                     "Setting": "hideShortsSection",
                     "Identifier": "ytd-rich-section-renderer",
                     "IdentifierType": "TagName",
-                    "SettingsOptionIdentifier": "--tools-input-checkbox-shorts-section",
                     "Type": "checkbox"
                 }
             ]
@@ -75,16 +66,13 @@
     },
     "Functions": {
         "Name": "Functions",
-        "Page": "functions.html",
         "Data": {
             "Quality": [
                 {
                     "Name": "Default Quality",
                     "Setting": "defaultQuality",
-                    "SettingsOptionIdentifier": "--tools-input-dropdown-default-quality",
                     "Type": "dropdown",
                     "Options": [
-                        "NONE",
                         "144",
                         "240",
                         "360",
